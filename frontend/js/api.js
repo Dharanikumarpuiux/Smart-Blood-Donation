@@ -1,5 +1,9 @@
 /* ── API Helper ── */
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = (typeof window !== 'undefined' && (window.API_BASE_URL || window.__ENV__?.API_BASE_URL))
+  ? (window.API_BASE_URL || window.__ENV__?.API_BASE_URL).replace(/\/$/, '') + '/api'
+  : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000/api'
+    : '/api';
 
 const api = {
   getToken: () => localStorage.getItem('bd_token'),

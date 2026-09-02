@@ -1,0 +1,339 @@
+/* ============================================================
+   LIFEDROP VISUAL EFFECTS LAYER — CSS DESIGN SYSTEM
+   Isolated presentation-layer visual effects
+   ============================================================ */
+
+/* ── Global Effects Tokens ── */
+:root {
+  --fx-electric-primary: var(--primary-light, #e74c3c);
+  --fx-electric-glow: var(--accent, #ff6b6b);
+  --fx-electric-gold: var(--warning, #f39c12);
+  --fx-electric-gold-glow: var(--accent-warm, #ff8e53);
+  --fx-spotlight-size: 260px;
+  --fx-spotlight-color: rgba(231, 76, 60, 0.16);
+  --fx-spotlight-gold: rgba(243, 156, 18, 0.16);
+}
+
+/* ============================================================
+   1. EFFECT A: ELECTRIC BORDER (Reusable Card Wrapper)
+   ============================================================ */
+
+.electric-border-card {
+  position: relative;
+  border-radius: var(--radius-lg, 24px) !important;
+  isolation: isolate;
+  background-clip: padding-box;
+}
+
+/* SVG overlay container for electric distortion & glow */
+.electric-border-svg {
+  position: absolute;
+  inset: -3px;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  pointer-events: none;
+  z-index: 3;
+  overflow: visible;
+  border-radius: inherit;
+}
+
+.electric-border-rect {
+  fill: none;
+  stroke: var(--fx-electric-primary);
+  stroke-width: 2px;
+  rx: var(--radius-lg, 24px);
+  ry: var(--radius-lg, 24px);
+  filter: url(#electric-filter);
+  opacity: 0.85;
+  transition: opacity 0.3s ease, stroke 0.3s ease;
+  animation: electric-breathe 2.8s ease-in-out infinite;
+}
+
+/* Layered outer glow halo */
+.electric-border-glow-1 {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  border: 1.5px solid var(--fx-electric-primary);
+  filter: blur(4px);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 2;
+  transition: var(--transition, all 0.3s ease);
+  animation: electric-breathe 2.8s ease-in-out infinite alternate;
+}
+
+.electric-border-glow-2 {
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid var(--fx-electric-glow);
+  filter: blur(10px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 1;
+  transition: var(--transition, all 0.3s ease);
+  animation: electric-breathe 2.8s ease-in-out infinite alternate 0.4s;
+}
+
+/* Crisp inner accent edge */
+.electric-border-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  pointer-events: none;
+  z-index: 2;
+  transition: var(--transition, all 0.3s ease);
+}
+
+/* Gold / Amber Theme for Featured Stat / Admin cards */
+.electric-border-card.theme-gold .electric-border-rect {
+  stroke: var(--fx-electric-gold);
+  filter: url(#electric-filter-gold);
+}
+.electric-border-card.theme-gold .electric-border-glow-1 {
+  border-color: var(--fx-electric-gold);
+  opacity: 0.7;
+}
+.electric-border-card.theme-gold .electric-border-glow-2 {
+  border-color: var(--fx-electric-gold-glow);
+  opacity: 0.4;
+}
+.electric-border-card.theme-gold .electric-border-inner {
+  border-color: rgba(255, 142, 83, 0.5);
+}
+
+/* Hover state: intensified electric glow and crispness */
+.electric-border-card:hover .electric-border-rect {
+  opacity: 1;
+  stroke-width: 2.5px;
+}
+.electric-border-card:hover .electric-border-glow-1 {
+  opacity: 0.9;
+  filter: blur(5px);
+}
+.electric-border-card:hover .electric-border-glow-2 {
+  opacity: 0.65;
+  filter: blur(14px);
+}
+
+@keyframes electric-breathe {
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.002); }
+}
+
+/* ============================================================
+   2. EFFECT B: LIQUID NAVBAR INDICATOR
+   ============================================================ */
+
+.navbar {
+  position: fixed;
+}
+
+.nav-links {
+  position: relative;
+}
+
+/* Single liquid slider indicator element */
+.fx-liquid-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 36px;
+  border-radius: var(--radius-sm, 8px);
+  background: linear-gradient(135deg, rgba(192, 57, 43, 0.28), rgba(231, 76, 60, 0.16));
+  border: 1px solid rgba(231, 76, 60, 0.4);
+  box-shadow: 0 0 16px rgba(192, 57, 43, 0.35);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  will-change: transform, width, height, opacity;
+  transform-origin: center center;
+}
+
+/* Crisp bottom underline glow inside liquid pill */
+.fx-liquid-indicator::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-light, #e74c3c), transparent);
+  border-radius: 2px;
+  box-shadow: 0 0 8px var(--accent, #ff6b6b);
+}
+
+.nav-links li {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-links a {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hide liquid indicator on mobile dropdown */
+@media (max-width: 768px) {
+  .fx-liquid-indicator {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   3. EFFECT C: CARD SPOTLIGHT / CURSOR-TRACKING GLOW
+   ============================================================ */
+
+.fx-spotlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.fx-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    var(--fx-spotlight-size) circle at var(--spotlight-x, -999px) var(--spotlight-y, -999px),
+    var(--fx-spotlight-color),
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+  will-change: background;
+}
+
+.fx-spotlight.theme-gold::before {
+  background: radial-gradient(
+    var(--fx-spotlight-size) circle at var(--spotlight-x, -999px) var(--spotlight-y, -999px),
+    var(--fx-spotlight-gold),
+    transparent 70%
+  );
+}
+
+.fx-spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Keep card contents above spotlight layer */
+.fx-spotlight > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Disable spotlight on touch devices */
+@media (pointer: coarse) {
+  .fx-spotlight::before {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   4. EFFECT D: GLOWING TUBE CURSOR CANVAS
+   ============================================================ */
+
+#fx-tube-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* ============================================================
+   5. EFFECT E: SCROLL REVEAL
+   ============================================================ */
+
+.fx-reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.fx-reveal.fx-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger utilities for grids */
+.fx-stagger > *:nth-child(1) { transition-delay: 0.05s; }
+.fx-stagger > *:nth-child(2) { transition-delay: 0.12s; }
+.fx-stagger > *:nth-child(3) { transition-delay: 0.19s; }
+.fx-stagger > *:nth-child(4) { transition-delay: 0.26s; }
+.fx-stagger > *:nth-child(5) { transition-delay: 0.33s; }
+.fx-stagger > *:nth-child(6) { transition-delay: 0.40s; }
+.fx-stagger > *:nth-child(7) { transition-delay: 0.47s; }
+.fx-stagger > *:nth-child(8) { transition-delay: 0.54s; }
+
+/* ============================================================
+   6. EFFECT F: REST / IDLE STATE ANIMATION
+   ============================================================ */
+
+.fx-idle-pulse {
+  animation: fx-idle-breathing 2.4s ease-in-out infinite !important;
+}
+
+@keyframes fx-idle-breathing {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 20px rgba(192, 57, 43, 0.4);
+  }
+  50% {
+    transform: scale(1.045);
+    box-shadow: 0 0 36px rgba(255, 107, 107, 0.65), 0 0 12px rgba(231, 76, 60, 0.8);
+  }
+}
+
+.fx-idle-glow {
+  animation: fx-idle-halo 2.4s ease-in-out infinite !important;
+}
+
+@keyframes fx-idle-halo {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(192, 57, 43, 0.3));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(255, 107, 107, 0.85));
+    transform: scale(1.06);
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION OVERRIDES
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .electric-border-rect,
+  .electric-border-glow-1,
+  .electric-border-glow-2,
+  .fx-idle-pulse,
+  .fx-idle-glow {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .fx-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  #fx-tube-canvas {
+    display: none !important;
+  }
+
+  .fx-liquid-indicator {
+    display: none !important;
+  }
+}

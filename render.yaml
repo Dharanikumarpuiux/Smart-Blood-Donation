@@ -1,0 +1,26 @@
+# ============================================================
+# Render Infrastructure-as-Code (render.yaml)
+# Smart Blood Donation & Emergency Response Platform (Backend)
+# ============================================================
+
+services:
+  - type: web
+    name: lifedrop-backend
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        sync: false # Set in Render Dashboard: Secure random 64-char hex string
+      - key: MONGODB_URI
+        sync: false # Set in Render Dashboard: MongoDB Atlas connection string
+      - key: CORS_ORIGIN
+        sync: false # Set in Render Dashboard: Vercel frontend URL (e.g. https://lifedrop.vercel.app)
