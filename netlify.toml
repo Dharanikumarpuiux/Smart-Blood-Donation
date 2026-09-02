@@ -1,0 +1,20 @@
+# ============================================================
+# Netlify Configuration (netlify.toml)
+# LifeDrop Frontend Deployment
+# ============================================================
+
+[build]
+  publish = "frontend"
+  # No build command needed since frontend uses vanilla HTML/CSS/JS
+
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
