@@ -125,8 +125,28 @@ function updateNavAuth() {
   const profileBtn = document.getElementById('nav-profile-btn');
   const logoutBtn = document.getElementById('nav-logout-btn');
 
-  if (api.isLoggedIn()) {
-    const user = api.getUser();
+  const user = api.getUser();
+  const isLoggedIn = api.isLoggedIn() && !!user;
+  const role = isLoggedIn ? user.role : null;
+
+  // Show / hide navbar links based on user role
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    const href = (a.getAttribute('href') || '').toLowerCase();
+    const li = a.closest('li') || a;
+
+    if (href.includes('hospital.html') || href === 'hospital.html') {
+      // Hospitals link is shown ONLY if the current user role is 'hospital'
+      li.style.display = (role === 'hospital') ? '' : 'none';
+    } else if (href.includes('donor.html') || href === 'donor.html') {
+      // Donor link shown for guests and donors
+      li.style.display = (role === 'hospital' || role === 'patient') ? 'none' : '';
+    } else if (href.includes('patient.html') || href === 'patient.html') {
+      // Patient link shown for guests and patients
+      li.style.display = (role === 'hospital' || role === 'donor') ? 'none' : '';
+    }
+  });
+
+  if (isLoggedIn) {
     if (loginBtn) loginBtn.style.display = 'none';
     if (signupBtn) signupBtn.style.display = 'none';
     if (profileBtn) {
@@ -140,6 +160,11 @@ function updateNavAuth() {
     if (signupBtn) signupBtn.style.display = 'inline-flex';
     if (profileBtn) profileBtn.style.display = 'none';
     if (logoutBtn) logoutBtn.style.display = 'none';
+  }
+
+  // Refresh liquid indicator positioning if active
+  if (window.FX && typeof window.FX.initLiquidNav === 'function') {
+    setTimeout(() => window.FX.initLiquidNav(), 40);
   }
 }
 

@@ -249,7 +249,10 @@
         navLinksContainer.appendChild(indicator);
       }
 
-      const links = Array.from(navLinksContainer.querySelectorAll('a'));
+      const links = Array.from(navLinksContainer.querySelectorAll('a')).filter(a => {
+        const li = a.closest('li') || a;
+        return li.style.display !== 'none';
+      });
       if (links.length === 0) return;
 
       // Determine active link: exact href matching or class 'active'
