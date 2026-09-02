@@ -564,20 +564,20 @@
     <div class="container">
       <div class="stats-row">
         <div class="stat-card">
-          <span class="num" id="stat-donors">10+</span>
+          <span class="num" id="stat-donors">0</span>
           <div class="label">Registered Donors</div>
         </div>
         <div class="stat-card">
-          <span class="num">320+</span>
-          <div class="label">Lives Saved</div>
+          <span class="num" id="stat-available">0</span>
+          <div class="label">Available Donors</div>
         </div>
         <div class="stat-card">
-          <span class="num">85+</span>
+          <span class="num" id="stat-hospitals">0</span>
           <div class="label">Partner Hospitals</div>
         </div>
         <div class="stat-card">
-          <span class="num">50+</span>
-          <div class="label">Cities Covered</div>
+          <span class="num" id="stat-requests">0</span>
+          <div class="label">Active Requests</div>
         </div>
       </div>
     </div>
@@ -747,6 +747,39 @@
   <script src="js/api.js"></script>
   <script src="js/fx/gsap.min.js"></script>
   <script src="js/fx/effects.js"></script>
+  <script>
+    // Live database stats loader
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await api.get('/stats');
+        if (res.ok && res.data.success) {
+          const s = res.data.stats;
+          const animateCount = (el, target) => {
+            if (!el) return;
+            const finalVal = Number(target) || 0;
+            const duration = 1200;
+            const startTime = performance.now();
+            const step = (now) => {
+              const progress = Math.min((now - startTime) / duration, 1);
+              const easeOutQuad = 1 - (1 - progress) * (1 - progress);
+              const current = Math.floor(easeOutQuad * finalVal);
+              el.textContent = current.toLocaleString() + (finalVal > 0 ? '+' : '');
+              if (progress < 1) requestAnimationFrame(step);
+              else el.textContent = finalVal.toLocaleString() + (finalVal > 0 ? '+' : '');
+            };
+            requestAnimationFrame(step);
+          };
+
+          animateCount(document.getElementById('stat-donors'), s.donors || 0);
+          animateCount(document.getElementById('stat-available'), s.availableDonors || 0);
+          animateCount(document.getElementById('stat-hospitals'), s.hospitals || 0);
+          animateCount(document.getElementById('stat-requests'), s.openRequests || (s.totalUnitsRequested || 0));
+        }
+      } catch (err) {
+        console.warn('Could not load live stats:', err);
+      }
+    });
+  </script>
 </body>
 
 </html>
