@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — LifeDrop</title>
+  <meta name="description" content="Create your LifeDrop account as a donor, patient, or hospital." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="drop-icon">🩸</div>
+      <span>Life</span>Drop
+    </a>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-container animate-in">
+
+      <!-- Left panel -->
+      <div class="auth-panel">
+        <div class="auth-panel-logo">
+          <div class="drop">🩸</div>
+          LifeDrop
+        </div>
+        <h2>Join Our Community of Life Savers</h2>
+        <p>Register today and make a difference. Your blood donation can save up to 3 lives.</p>
+        <div class="auth-panel-features">
+          <div class="auth-feature">
+            <div class="auth-feature-icon">🩸</div>
+            Register as a blood donor
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">🔍</div>
+            Find donors near you
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">🏥</div>
+            Hospital blood management
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">🔔</div>
+            Real-time request tracking
+          </div>
+        </div>
+      </div>
+
+      <!-- Right form panel -->
+      <div class="auth-form-panel">
+        <h1>Create Account</h1>
+        <p class="auth-subtitle">Already have an account? <a href="login.html">Sign in here</a></p>
+
+        <!-- Role Selector -->
+        <div class="role-selector">
+          <div class="role-btn selected" data-role="donor">
+            <span class="role-icon">🩸</span>
+            Donor
+          </div>
+          <div class="role-btn" data-role="patient">
+            <span class="role-icon">🤒</span>
+            Patient
+          </div>
+          <div class="role-btn" data-role="hospital">
+            <span class="role-icon">🏥</span>
+            Hospital
+          </div>
+        </div>
+
+        <div id="auth-message" class="auth-message"></div>
+
+        <form class="auth-form" id="signup-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="signup-name">Full Name</label>
+              <input type="text" id="signup-name" class="form-control" placeholder="John Doe" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signup-phone">Phone Number</label>
+              <input type="tel" id="signup-phone" class="form-control" placeholder="+91 9876543210" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" class="form-control" placeholder="you@example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-password">Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="signup-password" class="form-control" placeholder="Min. 6 characters" required />
+              <button type="button" class="password-toggle">👁️</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-confirm">Confirm Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="signup-confirm" class="form-control" placeholder="Repeat your password" required />
+              <button type="button" class="password-toggle">👁️</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="signup-submit-btn" data-text="🩸 Create Account">
+            🩸 Create Account
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

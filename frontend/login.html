@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — LifeDrop</title>
+  <meta name="description" content="Sign in to your LifeDrop account." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="drop-icon">🩸</div>
+      <span>Life</span>Drop
+    </a>
+    <div class="nav-actions">
+      <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-container animate-in">
+
+      <!-- Left panel -->
+      <div class="auth-panel">
+        <div class="auth-panel-logo">
+          <div class="drop">🩸</div>
+          LifeDrop
+        </div>
+        <h2>Welcome Back, Life Saver! 💗</h2>
+        <p>Sign in to your account to manage your donor profile, check requests, and help save lives.</p>
+        <div class="auth-panel-features">
+          <div class="auth-feature">
+            <div class="auth-feature-icon">📊</div>
+            View your donor dashboard
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">🔄</div>
+            Update your availability
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">📋</div>
+            Manage blood requests
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">💬</div>
+            Connect with donors
+          </div>
+        </div>
+      </div>
+
+      <!-- Right form panel -->
+      <div class="auth-form-panel">
+        <h1>Sign In</h1>
+        <p class="auth-subtitle">Don't have an account? <a href="signup.html">Create one here</a></p>
+
+        <div id="auth-message" class="auth-message"></div>
+
+        <form class="auth-form" id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-control" placeholder="you@example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required />
+              <button type="button" class="password-toggle">👁️</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="login-submit-btn" data-text="🔐 Sign In">
+            🔐 Sign In
+          </button>
+
+          <div class="auth-divider">or</div>
+
+          <p style="text-align:center;font-size:0.875rem;color:var(--text-muted);">
+            New to LifeDrop? <a href="signup.html" style="color:var(--primary-light);font-weight:600;">Create a free account →</a>
+          </p>
+        </form>
+
+        <!-- Quick demo info -->
+        <div style="margin-top:1.5rem;padding:1rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <p style="font-size:0.78rem;color:var(--text-muted);text-align:center;">
+            🩺 <strong style="color:var(--text-secondary)">First time?</strong> Register above to create your profile as a donor, patient, or hospital.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

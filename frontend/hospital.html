@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Portal — LifeDrop</title>
+  <meta name="description" content="Hospital blood management portal. Register your hospital, manage blood inventory and post urgent requests." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/hospital.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="drop-icon">🩸</div>
+      <span>Life</span>Drop
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="find-blood.html">Find Blood</a></li>
+      <li><a href="donor.html">Donor</a></li>
+      <li><a href="hospital.html" class="active">Hospital</a></li>
+      <li><a href="patient.html">Patient</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-secondary btn-sm" id="nav-login-btn">Login</a>
+      <a href="signup.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Sign Up</a>
+      <a href="hospital.html" class="btn btn-secondary btn-sm" id="nav-profile-btn" style="display:none">My Hospital</a>
+      <button class="btn btn-outline btn-sm" id="nav-logout-btn" style="display:none" onclick="logout()">Logout</button>
+    </div>
+    <div class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <div class="section-tag">🏥 Hospital Portal</div>
+      <h1>Hospital <span style="color:var(--primary-light)">Blood Management</span></h1>
+      <p style="max-width:520px;margin:0.75rem auto 0;">Register your hospital, manage your blood inventory, and post urgent blood requests to connect with available donors.</p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-bottom:4rem;">
+    <div class="hospital-layout">
+
+      <!-- Sidebar -->
+      <aside class="hospital-sidebar">
+        <div class="hospital-profile-mini">
+          <div class="hospital-icon">🏥</div>
+          <h3 id="sidebar-hospital-name">Your Hospital</h3>
+          <p id="sidebar-hospital-city">📍 City</p>
+        </div>
+
+        <div class="card" style="padding:0.5rem;">
+          <div class="sidebar-nav">
+            <button class="sidebar-nav-item active" data-tab="dashboard">
+              <span class="icon">📊</span> Dashboard
+            </button>
+            <button class="sidebar-nav-item" data-tab="profile">
+              <span class="icon">📋</span> Hospital Profile
+            </button>
+            <button class="sidebar-nav-item" data-tab="inventory">
+              <span class="icon">🩸</span> Blood Inventory
+            </button>
+            <button class="sidebar-nav-item" data-tab="request">
+              <span class="icon">🚨</span> Post Request
+            </button>
+            <button class="sidebar-nav-item" data-tab="requests">
+              <span class="icon">📜</span> All Requests
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main>
+
+        <!-- Dashboard Tab -->
+        <div class="hospital-tab active" id="tab-dashboard">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
+            <div class="card" style="text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">🩸</div>
+              <div style="font-size:1.8rem;font-weight:800;color:var(--primary-light);" id="dash-my-inventory">8</div>
+              <div style="font-size:0.82rem;color:var(--text-muted);">Blood Types Available</div>
+            </div>
+            <div class="card" style="text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">🚨</div>
+              <div style="font-size:1.8rem;font-weight:800;color:var(--warning);" id="dash-open-requests">0</div>
+              <div style="font-size:0.82rem;color:var(--text-muted);">My Open Requests</div>
+            </div>
+            <div class="card" style="text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">✅</div>
+              <div style="font-size:1.8rem;font-weight:800;color:var(--success);" id="dash-fulfilled">0</div>
+              <div style="font-size:0.82rem;color:var(--text-muted);">Fulfilled Requests</div>
+            </div>
+          </div>
+
+          <!-- Live analytics strip -->
+          <div class="card" style="margin-bottom:1.5rem;overflow:hidden;">
+            <div class="analytics-strip">
+              <div class="analytics-item">
+                <span class="num" id="stat-donors">—</span>
+                <span class="label">Registered Donors</span>
+              </div>
+              <div class="analytics-item">
+                <span class="num" id="stat-available">—</span>
+                <span class="label">Available Now</span>
+              </div>
+              <div class="analytics-item">
+                <span class="num" id="stat-hospitals">—</span>
+                <span class="label">Hospitals</span>
+              </div>
+              <div class="analytics-item">
+                <span class="num" id="stat-open">—</span>
+                <span class="label">Open Requests</span>
+              </div>
+              <div class="analytics-item">
+                <span class="num" id="stat-units">—</span>
+                <span class="label">Units Requested</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-bottom:1.25rem;">⚡ Quick Actions</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <button class="btn btn-primary" onclick="hospital_switchTab('request')">🚨 Post Urgent Request</button>
+              <button class="btn btn-secondary" onclick="hospital_switchTab('inventory')">🩸 Update Inventory</button>
+              <a href="find-blood.html" class="btn btn-secondary">🔍 Find Donors</a>
+              <button class="btn btn-secondary" onclick="hospital_switchTab('profile')">✏️ Edit Profile</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <h3 style="margin-bottom:1rem;">📢 Recent Blood Requests</h3>
+            <div id="dash-recent-requests">
+              <div class="empty-state" style="padding:2rem;">
+                <div class="empty-icon">📋</div>
+                <p>No requests yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div class="hospital-tab" id="tab-profile">
+          <div class="card">
+            <h3 style="margin-bottom:1.5rem;">🏥 Hospital Profile</h3>
+            <form id="hospital-form">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="form-group" style="grid-column:1/-1;">
+                  <label class="form-label" for="h-name">Hospital Name *</label>
+                  <input type="text" id="h-name" class="form-control" placeholder="e.g. Apollo Hospital" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-reg">Registration Number</label>
+                  <input type="text" id="h-reg" class="form-control" placeholder="Govt. reg. number" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-phone">Phone *</label>
+                  <input type="tel" id="h-phone" class="form-control" placeholder="+91 9876543210" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-email">Email</label>
+                  <input type="email" id="h-email" class="form-control" placeholder="hospital@example.com" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-specialization">Specialization</label>
+                  <select id="h-specialization" class="form-control">
+                    <option value="General">General Hospital</option>
+                    <option value="Multispeciality">Multispeciality</option>
+                    <option value="Cardiac">Cardiac</option>
+                    <option value="Cancer">Cancer / Oncology</option>
+                    <option value="Trauma">Trauma Center</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-beds">Number of Beds</label>
+                  <input type="number" id="h-beds" class="form-control" placeholder="e.g. 200" />
+                </div>
+                <div class="form-group" style="grid-column:1/-1;">
+                  <label class="form-label" for="h-address">Address</label>
+                  <input type="text" id="h-address" class="form-control" placeholder="Street address" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-city">City *</label>
+                  <input type="text" id="h-city" class="form-control" placeholder="e.g. Chennai" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-state">State</label>
+                  <input type="text" id="h-state" class="form-control" placeholder="e.g. Tamil Nadu" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="h-pincode">Pincode</label>
+                  <input type="text" id="h-pincode" class="form-control" placeholder="600001" />
+                </div>
+              </div>
+              <div style="margin-top:1.5rem;">
+                <button type="submit" class="btn btn-primary" id="save-hospital-btn">💾 Save Hospital Profile</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Blood Inventory Tab -->
+        <div class="hospital-tab" id="tab-inventory">
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.75rem;">
+              <h3>🩸 Blood Inventory</h3>
+              <span class="badge badge-blue">Units in stock</span>
+            </div>
+            <div class="blood-inventory-grid">
+              <div class="blood-unit-card level-good">
+                <div class="blood-group">A+</div>
+                <div class="unit-count" id="inv-ap">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-ap" style="width:0%"></div></div>
+              </div>
+              <div class="blood-unit-card level-critical">
+                <div class="blood-group">A-</div>
+                <div class="unit-count" id="inv-an">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-an" style="width:0%"></div></div>
+              </div>
+              <div class="blood-unit-card level-low">
+                <div class="blood-group">B+</div>
+                <div class="unit-count" id="inv-bp">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-bp" style="width:0%"></div></div>
+              </div>
+              <div class="blood-unit-card level-critical">
+                <div class="blood-group">B-</div>
+                <div class="unit-count" id="inv-bn">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-bn" style="width:0%"></div></div>
+              </div>
+              <div class="blood-unit-card level-good">
+                <div class="blood-group">AB+</div>
+                <div class="unit-count" id="inv-abp">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-abp" style="width:0%"></div></div>
+              </div>
+              <div class="blood-unit-card level-critical">
+                <div class="blood-group">AB-</div>
+                <div class="unit-count" id="inv-abn">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-abn" style="width:0%"></div></div>
+              </div>
+              <div class="blood-unit-card level-good">
+                <div class="blood-group">O+</div>
+                <div class="unit-count" id="inv-op">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-op" style="width:0%"></div></div>
+              </div>
+              <div class="blood-unit-card level-low">
+                <div class="blood-group">O-</div>
+                <div class="unit-count" id="inv-on">0</div>
+                <div class="unit-label">units</div>
+                <div class="level-bar"><div class="level-bar-fill" id="bar-on" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div style="margin-top:1.5rem;padding:1rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid var(--border);">
+              <p style="font-size:0.85rem;color:var(--text-muted);">
+                📌 To update inventory levels, please contact the LifeDrop admin or use the API directly. Inventory is updated after each donation is confirmed.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post Request Tab -->
+        <div class="hospital-tab" id="tab-request">
+          <div class="card">
+            <h3 style="margin-bottom:1.5rem;">🚨 Post Urgent Blood Request</h3>
+            <form id="request-form">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div class="form-group">
+                  <label class="form-label" for="req-blood-group">Blood Group Needed *</label>
+                  <select id="req-blood-group" class="form-control" required>
+                    <option value="">Select blood group</option>
+                    <option value="A+">A+</option><option value="A-">A-</option>
+                    <option value="B+">B+</option><option value="B-">B-</option>
+                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                    <option value="O+">O+</option><option value="O-">O-</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="req-units">Units Required</label>
+                  <input type="number" id="req-units" class="form-control" value="1" min="1" max="20" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="req-urgency">Urgency Level</label>
+                  <select id="req-urgency" class="form-control">
+                    <option value="normal">🟢 Normal</option>
+                    <option value="urgent">🟡 Urgent (within 24h)</option>
+                    <option value="critical">🔴 Critical (immediate)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="req-patient">Patient Name (Optional)</label>
+                  <input type="text" id="req-patient" class="form-control" placeholder="Patient name" />
+                </div>
+                <div class="form-group" style="grid-column:1/-1;">
+                  <label class="form-label" for="req-notes">Additional Notes</label>
+                  <textarea id="req-notes" class="form-control" rows="3" placeholder="Any special requirements or context..."></textarea>
+                </div>
+              </div>
+              <div style="margin-top:1.5rem;">
+                <button type="submit" class="btn btn-primary" id="submit-request-btn">🚨 Submit Request</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- All Requests Tab -->
+        <div class="hospital-tab" id="tab-requests">
+          <div class="card">
+            <h3 style="margin-bottom:1.25rem;">📜 All Blood Requests</h3>
+            <div id="requests-list">
+              <div class="empty-state" style="padding:2rem;">
+                <div class="empty-icon">📋</div>
+                <p>Loading requests...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="js/api.js"></script>
+  <script src="js/hospital.js"></script>
+  <script>
+    function hospital_switchTab(tab) { switchTab(tab); }
+  </script>
+</body>
+</html>

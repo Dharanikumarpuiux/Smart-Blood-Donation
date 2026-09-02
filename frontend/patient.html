@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Portal — LifeDrop</title>
+  <meta name="description"
+    content="Patient blood request portal. Create your profile and find blood donors for your needs." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/patient.css" />
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="drop-icon">🩸</div>
+      <span>Life</span>Drop
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="find-blood.html">Find Blood</a></li>
+      <li><a href="donor.html">Donor</a></li>
+      <li><a href="hospital.html">Hospital</a></li>
+      <li><a href="patient.html" class="active">Patient</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-secondary btn-sm" id="nav-login-btn">Login</a>
+      <a href="signup.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Sign Up</a>
+      <a href="patient.html" class="btn btn-secondary btn-sm" id="nav-profile-btn" style="display:none">My Profile</a>
+      <button class="btn btn-outline btn-sm" id="nav-logout-btn" style="display:none" onclick="logout()">Logout</button>
+    </div>
+    <div class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">
+      <span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <div class="section-tag">🤒 Patient Portal</div>
+      <h1>Patient <span style="color:var(--primary-light)">Blood Request</span></h1>
+      <p style="max-width:520px;margin:0.75rem auto 0;">Create your patient profile, submit blood requests, and track
+        their status. We'll help you find the right donor.</p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-bottom:4rem;">
+
+    <!-- Patient header (filled by JS) -->
+    <div id="patient-header" style="margin-bottom:1.5rem;"></div>
+
+    <!-- Tab Buttons -->
+    <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm active" data-patient-tab="profile">📋 My Profile</button>
+      <button class="btn btn-secondary btn-sm" data-patient-tab="request">🩸 Request Blood</button>
+      <button class="btn btn-secondary btn-sm" data-patient-tab="status">📊 My Requests</button>
+    </div>
+
+    <!-- Profile Tab -->
+    <div class="patient-tab active" id="ptab-profile">
+      <div class="patient-form-card animate-in">
+        <h3 style="margin-bottom:1.5rem;">👤 Patient Profile</h3>
+        <form id="patient-form">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group" style="grid-column:1/-1;">
+              <label class="form-label" for="p-fullname">Full Name *</label>
+              <input type="text" id="p-fullname" class="form-control" placeholder="Patient full name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-age">Age</label>
+              <input type="number" id="p-age" class="form-control" placeholder="Age" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-gender">Gender</label>
+              <select id="p-gender" class="form-control">
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-blood-group">Blood Group *</label>
+              <select id="p-blood-group" class="form-control" required>
+                <option value="">Select blood group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-phone">Phone</label>
+              <input type="tel" id="p-phone" class="form-control" placeholder="+91 9876543210" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-email">Email</label>
+              <input type="email" id="p-email" class="form-control" placeholder="patient@example.com" />
+            </div>
+            <div class="form-group" style="grid-column:1/-1;">
+              <label class="form-label" for="p-address">Address</label>
+              <input type="text" id="p-address" class="form-control" placeholder="Street address" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-city">City *</label>
+              <input type="text" id="p-city" class="form-control" placeholder="e.g. Chennai" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-state">State</label>
+              <input type="text" id="p-state" class="form-control" placeholder="e.g. Tamil Nadu" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-condition">Medical Condition</label>
+              <input type="text" id="p-condition" class="form-control" placeholder="e.g. Thalassemia, Surgery" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="p-hospital">Hospital Name</label>
+              <input type="text" id="p-hospital" class="form-control" placeholder="Treating hospital" />
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <button type="submit" class="btn btn-primary" id="save-patient-btn">💾 Save Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Request Blood Tab -->
+    <div class="patient-tab" id="ptab-request">
+      <div class="patient-form-card animate-in">
+        <h3 style="margin-bottom:0.4rem;">🩸 Submit Blood Request</h3>
+        <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1.5rem;">Your request will be visible to
+          matching donors in your city.</p>
+        <form id="patient-request-form">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label class="form-label" for="req-bg">Blood Group Needed *</label>
+              <select id="req-bg" class="form-control" required>
+                <option value="">Select blood group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="req-units">Units Required</label>
+              <input type="number" id="req-units" class="form-control" value="1" min="1" max="20" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="req-urgency">Urgency</label>
+              <select id="req-urgency" class="form-control">
+                <option value="normal">🟢 Normal</option>
+                <option value="urgent">🟡 Urgent (within 24h)</option>
+                <option value="critical">🔴 Critical (immediate)</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column:1/-1;">
+              <label class="form-label" for="req-notes">Notes</label>
+              <textarea id="req-notes" class="form-control" rows="3"
+                placeholder="Additional info about the request..."></textarea>
+            </div>
+          </div>
+          <div style="margin-top:1.25rem;display:flex;gap:1rem;flex-wrap:wrap;">
+            <button type="submit" class="btn btn-primary" id="submit-req-btn">🩸 Submit Blood Request</button>
+            <a href="find-blood.html" class="btn btn-secondary">🔍 Search Donors Now</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- My Requests Tab -->
+    <div class="patient-tab" id="ptab-status">
+      <div class="card animate-in">
+        <div
+          style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;">
+          <h3>📊 My Blood Requests</h3>
+          <button class="btn btn-secondary btn-sm" onclick="loadMyRequests()">🔄 Refresh</button>
+        </div>
+        <div class="request-status-list" id="my-requests-list">
+          <div class="empty-state" style="padding:2rem;">
+            <div class="empty-icon">⏳</div>
+            <p>Loading your requests...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="js/api.js"></script>
+  <script src="js/patient.js"></script>
+</body>
+
+</html>

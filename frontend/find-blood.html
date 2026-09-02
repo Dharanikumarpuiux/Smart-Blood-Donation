@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Blood Donors — LifeDrop</title>
+  <meta name="description" content="Search for available blood donors by blood group and city. Find compatible donors near you instantly." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/patient.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="drop-icon">🩸</div>
+      <span>Life</span>Drop
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="find-blood.html" class="active">Find Blood</a></li>
+      <li><a href="donor.html">Donor</a></li>
+      <li><a href="hospital.html">Hospitals</a></li>
+      <li><a href="patient.html">Patients</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-secondary btn-sm" id="nav-login-btn">Login</a>
+      <a href="signup.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Sign Up</a>
+      <a href="#" class="btn btn-secondary btn-sm" id="nav-profile-btn" style="display:none">Profile</a>
+      <button class="btn btn-outline btn-sm" id="nav-logout-btn" style="display:none" onclick="logout()">Logout</button>
+    </div>
+    <div class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- Search Hero -->
+  <section class="search-hero">
+    <div class="container">
+      <div class="section-tag">🔍 Search Donors</div>
+      <h1>Find <span style="color:var(--primary-light)">Blood Donors</span> Near You</h1>
+      <p>Search available donors by blood group and city. Contact them directly to arrange a donation.</p>
+
+      <form id="search-form">
+        <div class="search-bar">
+          <select id="search-blood-group">
+            <option value="">All Groups</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+          <div class="divider-v"></div>
+          <input type="text" id="search-city" placeholder="🏙️ Enter city name..." />
+          <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
+        </div>
+      </form>
+
+      <div class="filter-chips">
+        <div class="filter-chip active" data-bg="all">All</div>
+        <div class="filter-chip" data-bg="A+">A+</div>
+        <div class="filter-chip" data-bg="A-">A-</div>
+        <div class="filter-chip" data-bg="B+">B+</div>
+        <div class="filter-chip" data-bg="B-">B-</div>
+        <div class="filter-chip" data-bg="AB+">AB+</div>
+        <div class="filter-chip" data-bg="AB-">AB-</div>
+        <div class="filter-chip" data-bg="O+">O+</div>
+        <div class="filter-chip" data-bg="O-">O-</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Urgent near you -->
+  <section class="section" style="padding-top:0;">
+    <div class="container" id="urgent-banner" style="display:none;"></div>
+  </section>
+
+  <!-- Donors Grid -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="results-header">
+        <span class="results-count" id="results-count">Loading donors...</span>
+        <a href="donor.html" class="btn btn-primary btn-sm">🩸 Become a Donor</a>
+      </div>
+      <div class="donors-grid" id="donors-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Emergency Banner -->
+  <section style="padding: 4rem 0; background: linear-gradient(135deg, rgba(192,57,43,0.1), rgba(231,76,60,0.05)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container" style="text-align:center;">
+      <h2>🚨 Urgent Blood Needed?</h2>
+      <p style="margin:0.75rem 0 2rem;max-width:500px;margin-left:auto;margin-right:auto;">Can't find a donor? Post a blood request and let our network reach out to available donors in your area.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="patient.html" class="btn btn-primary btn-lg">🤒 Post as Patient</a>
+        <a href="hospital.html" class="btn btn-secondary btn-lg">🏥 Post as Hospital</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast-container"></div>
+  <script src="js/api.js"></script>
+  <script src="js/compatibility.js"></script>
+  <script src="js/find-blood.js"></script>
+  <script>
+    // Pre-fill blood group from URL params
+    const params = new URLSearchParams(window.location.search);
+    const bgParam = params.get('bg');
+    if (bgParam) {
+      document.addEventListener('DOMContentLoaded', () => {
+        const select = document.getElementById('search-blood-group');
+        if (select) { select.value = bgParam; filterDonors(); }
+      });
+    }
+  </script>
+</body>
+</html>
